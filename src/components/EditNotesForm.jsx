@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-export const EditNotesForm = ({ editNote, task }) => {
+export const EditNotesForm = ({ editNote, task, findTags }) => {
+  const hashTag = /(^|\s*)(#[a-z_а-і-я\d-]+)/gi;
   const [value, setValue] = useState(task.task);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    editNote(value, task.id);
+    findTags(value);
+    editNote(value.replace(hashTag, ''), task.id);
     setValue('');
   };
   return (
@@ -16,7 +17,7 @@ export const EditNotesForm = ({ editNote, task }) => {
         className="notes-input"
         placeholder="Update Note!"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value, (task.tag = e.target.value.match(hashTag)))}
       />
       <button type="submit" className="note-btn">
         Update Note

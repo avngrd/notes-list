@@ -16,17 +16,16 @@ body {
   background: #8758ff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: row;
 }
 
 .App {
   text-align: center;
-}
-
-h1 {
-  color: #fff;
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
+  h1 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+  }
 }
 
 .notes-wrapper {
@@ -34,52 +33,85 @@ h1 {
   margin-top: 5rem;
   padding: 2rem;
   border-radius: 5px;
+
+  .notes-form {
+    width: 100%;
+    .note-btn {
+      background: #8758ff;
+      color: #fff;
+      border: none;
+      padding: 0.55rem;
+      cursor: pointer;
+    }
+
+    .notes-input {
+      outline: none;
+      background: none;
+      border: 1px solid #8758ff;
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      width: 300px;
+      color: #fff;
+
+      .notes-input::placeholder {
+        color: #ffffff4d;
+      }
+    }
+  }
+  .note {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #8758ff;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    .completed {
+      color: #c5aeff;
+      text-decoration: line-through;
+    }
+
+    .fa-trash {
+      margin-left: 0.75rem;
+    }
+  }
 }
 
-.notes-form {
-  width: 100%;
-}
-
-.notes-input {
-  outline: none;
-  background: none;
-  border: 1px solid #8758ff;
-  padding: 0.5rem 1rem;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  width: 300px;
-  color: #fff;
-}
-
-.notes-input::placeholder {
-  color: #ffffff4d;
-}
-
-.note-btn {
+.note-tag-btn {
   background: #8758ff;
   color: #fff;
   border: none;
   padding: 0.55rem;
   cursor: pointer;
+  border-left: solid 1px #1a1a40;
 }
 
-.note {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #8758ff;
-  color: #fff;
-  padding: 0.75rem 1rem;
+.hashtag {
+  color: #ac90f5;
+  background-color: #1a1a40;
   border-radius: 5px;
-  margin-bottom: 1rem;
+  padding: 2px 5px;
+}
+.tags-popup {
+  width: 550px;
+  height: 150px;
+  background-color: #fff;
+  margin-top: 10px;
+  border-radius: 15px;
+}
+
+.tags-popup__list {
+  text-align: left;
+  list-style-type: none;
+}
+
+.tag {
+  padding-left: 10px;
+  color: #ac90f5;
+  border-radius: 5px;
   cursor: pointer;
-}
-
-.fa-trash {
-  margin-left: 0.75rem;
-}
-
-.completed {
-  color: #c5aeff;
-  text-decoration: line-through;
 }
