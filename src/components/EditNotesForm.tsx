@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
+import { NoteItem } from './NotesWrapper';
 
-export const EditNotesForm = ({ editNote, task, findTags }) => {
+type EditNotesProps = {
+  editNote: void;
+  task: NoteItem;
+  findTags: void;
+};
+
+export const EditNotesForm: React.FC<EditNotesProps> = ({ editNote, task, findTags }) => {
   const hashTag = /(^|\s*)(#[a-z_а-і-я\d-]+)/gi;
   const [value, setValue] = useState(task.task);
 

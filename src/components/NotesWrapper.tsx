@@ -7,11 +7,22 @@ import { v4 as uuidv4 } from 'uuid';
 import { EditNotesForm } from './EditNotesForm';
 uuidv4();
 
-export const NotesWrapper = () => {
-  const [notes, setNotes] = useState(Data);
-  const [hashTags, setHashTags] = useState([notes.tag]);
+export interface NoteItem {
+  match(hashTag: RegExp): string | null;
+  replace(hashTag: RegExp, arg1: string): string;
+  id: string;
+  task: string;
+  completed: boolean;
+  isEditing: boolean;
+  tag: string | null;
+}
 
-  const addNote = (note) => {
+export const NotesWrapper: React.FC = () => {
+  const [notes, setNotes] = useState(Data);
+  const [notesCopy, setNotesCopy] = useState(Data);
+
+  const [hashTags, setHashTags] = useState();
+  const addNote = (note: NoteItem) => {
     setNotes([
       ...notes,
       {
@@ -24,36 +35,36 @@ export const NotesWrapper = () => {
     ]);
   };
 
-  const toggleComplete = (id) => {
+  const toggleComplete = (id: string) => {
     setNotes(
       notes.map((note) => (note.id === id ? { ...note, completed: !note.completed } : note)),
     );
   };
 
-  const deleteNote = (id) => {
+  const deleteNote = (id: string) => {
     setNotes(notes.filter((note) => note.id !== id));
   };
 
-  const editNote = (id) => {
+  const editNote = (id: string) => {
     setNotes(
       notes.map((note) => (note.id === id ? { ...note, isEditing: !note.isEditing } : note)),
     );
   };
 
-  const editTask = (task, id) => {
+  const editTask = (task: string, id: string) => {
     setNotes(
       notes.map((note) => (note.id === id ? { ...note, task, isEditing: !note.isEditing } : note)),
     );
   };
 
-  const findTags = (value) => {
+  const findTags = (value: { match: (arg0: RegExp) => React.SetStateAction<undefined> }) => {
     if (value.match(hashTag)) {
       setHashTags(value.match(hashTag));
     }
     return null;
   };
 
-  function deleteTag(id) {
+  function deleteTag(id: string) {
     const deletedTags = notes.map((note) => {
       if (id === note.id) {
         return { ...note, tag: null };
@@ -63,7 +74,13 @@ export const NotesWrapper = () => {
     setNotes(deletedTags);
   }
 
-  console.log(notes.filter((notess) => notess.tag !== '#good'));
+  function filterTag(tag: string) {
+    setNotes(notes.filter((notess) => notess.tag === tag));
+  }
+
+  function allNotes() {
+    setNotes(notesCopy);
+  }
 
   const hashTag = /(^|\s*)(#[a-z_а-і-я\d-]+)/gi;
 
@@ -93,12 +110,12 @@ export const NotesWrapper = () => {
         <div className="tags-popup__content">
           {
             <div>
-              <button className="tag" onClick={() => setNotes(...notes)}>
+              <button className="tag-all" onClick={() => allNotes()}>
                 All
               </button>
               <ul className="tags-popup__list">
                 {notes.map((note, i) => (
-                  <li className="tag" key={i} onClick={() => console.log(note.tag)}>
+                  <li className="tag" key={i} onClick={() => filterTag(note.tag)}>
                     {note.tag}
                   </li>
                 ))}
