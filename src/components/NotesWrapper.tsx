@@ -20,10 +20,10 @@ export interface NoteItem {
 
 export const NotesWrapper: React.FC = () => {
   const [notes, setNotes] = useState(Data);
-  const [notesCopy, setNotesCopy] = useState(Data);
+  const notesCopy = Data;
 
   const [hashTags, setHashTags] = useState<string | null | RegExpMatchArray>();
-
+  console.log(hashTags);
   const addNote = (note: any) => {
     setNotes([
       ...notes,
