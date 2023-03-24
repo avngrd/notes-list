@@ -2,21 +2,27 @@ import React, { useState } from 'react';
 import { NoteItem } from './NotesWrapper';
 
 type EditNotesProps = {
-  editNote: void;
+  editNote: (arg0: string, id: string) => void;
   task: NoteItem;
-  findTags: void;
+  findTags: (value: string) => void;
 };
 
 export const EditNotesForm: React.FC<EditNotesProps> = ({ editNote, task, findTags }) => {
   const hashTag = /(^|\s*)(#[a-z_а-і-я\d-]+)/gi;
   const [value, setValue] = useState(task.task);
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
     findTags(value);
     editNote(value.replace(hashTag, ''), task.id);
     setValue('');
   };
+
+  function addData(event: React.ChangeEvent<HTMLInputElement>) {
+    const findedTag: RegExpMatchArray | null | string = event.target.value.match(hashTag);
+    task.tag = findedTag;
+    setValue(event.target.value);
+  }
   return (
     <form className="notes-form" onSubmit={handleSubmit}>
       <input
@@ -24,7 +30,7 @@ export const EditNotesForm: React.FC<EditNotesProps> = ({ editNote, task, findTa
         className="notes-input"
         placeholder="Update Note!"
         value={value}
-        onChange={(e) => setValue(e.target.value, (task.tag = e.target.value.match(hashTag)))}
+        onChange={addData}
       />
       <button type="submit" className="note-btn">
         Update Note

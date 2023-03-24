@@ -9,8 +9,8 @@ type NotesProps = {
   toggleComplete: (id: string) => void;
   deleteNote: (id: string) => void;
   editNote: (id: string) => void;
-  deleteTag: (id: string, tag: string | null) => void;
-  tag: string;
+  deleteTag: (id: string) => void;
+  tag: string | RegExpMatchArray | null;
 };
 
 export const Notes: React.FC<NotesProps> = ({
@@ -28,11 +28,7 @@ export const Notes: React.FC<NotesProps> = ({
       </p>
       <span className={tag != null ? 'hashtag' : ''}>
         {tag}
-        {tag != null ? (
-          <FontAwesomeIcon icon={faTrash} onClick={() => deleteTag(task.id, task.tag)} />
-        ) : (
-          ''
-        )}
+        {tag != null ? <FontAwesomeIcon icon={faTrash} onClick={() => deleteTag(task.id)} /> : ''}
       </span>
       <div>
         <FontAwesomeIcon icon={faPenToSquare} onClick={() => editNote(task.id)} />

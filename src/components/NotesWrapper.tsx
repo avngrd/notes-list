@@ -7,22 +7,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { EditNotesForm } from './EditNotesForm';
 uuidv4();
 
+export type reg = { match(hashTag: RegExp): string };
+export type rep = { replace(hashTag: RegExp, arg1: string): string };
+
 export interface NoteItem {
-  match(hashTag: RegExp): string | null;
-  replace(hashTag: RegExp, arg1: string): string;
   id: string;
   task: string;
   completed: boolean;
   isEditing: boolean;
-  tag: string | null;
+  tag: string | null | RegExpMatchArray;
 }
 
 export const NotesWrapper: React.FC = () => {
   const [notes, setNotes] = useState(Data);
   const [notesCopy, setNotesCopy] = useState(Data);
 
-  const [hashTags, setHashTags] = useState();
-  const addNote = (note: NoteItem) => {
+  const [hashTags, setHashTags] = useState<string | null | RegExpMatchArray>();
+
+  const addNote = (note: any) => {
     setNotes([
       ...notes,
       {
@@ -45,11 +47,11 @@ export const NotesWrapper: React.FC = () => {
     setNotes(notes.filter((note) => note.id !== id));
   };
 
-  const editNote = (id: string) => {
+  function editNote(id: string) {
     setNotes(
       notes.map((note) => (note.id === id ? { ...note, isEditing: !note.isEditing } : note)),
     );
-  };
+  }
 
   const editTask = (task: string, id: string) => {
     setNotes(
@@ -57,12 +59,12 @@ export const NotesWrapper: React.FC = () => {
     );
   };
 
-  const findTags = (value: { match: (arg0: RegExp) => React.SetStateAction<undefined> }) => {
+  function findTags(value: string) {
     if (value.match(hashTag)) {
       setHashTags(value.match(hashTag));
     }
     return null;
-  };
+  }
 
   function deleteTag(id: string) {
     const deletedTags = notes.map((note) => {
@@ -74,7 +76,7 @@ export const NotesWrapper: React.FC = () => {
     setNotes(deletedTags);
   }
 
-  function filterTag(tag: string) {
+  function filterTag(tag: string | null) {
     setNotes(notes.filter((notess) => notess.tag === tag));
   }
 
@@ -91,6 +93,7 @@ export const NotesWrapper: React.FC = () => {
         <NotesForm addNote={addNote} findTags={findTags} />
         {notes.map((note, index) =>
           note.isEditing ? (
+            // @ts-ignore
             <EditNotesForm editNote={editTask} findTags={findTags} task={note} tag={note.tag} />
           ) : (
             <Notes
@@ -100,7 +103,6 @@ export const NotesWrapper: React.FC = () => {
               deleteNote={deleteNote}
               deleteTag={deleteTag}
               editNote={editNote}
-              hashTags={hashTags}
               tag={note.tag}
             />
           ),

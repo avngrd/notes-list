@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 
-export const NotesForm = ({ addNote, findTags }) => {
+type NotesFormProps = {
+  addNote: (value: string) => void;
+  findTags: (value: string) => void;
+};
+
+export const NotesForm: React.FC<NotesFormProps> = ({ addNote, findTags }) => {
   const [value, setValue] = useState('');
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
     findTags(value);
     addNote(value);
